@@ -1,0 +1,19 @@
+workflows:
+  android-aab:
+    name: Build FocusLock AAB
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      java: 17
+    scripts:
+      - name: Unzip project
+        script: |
+          unzip -o FocusLock.zip
+          ls -la
+      - name: Build AAB
+        script: |
+          cd FocusLock
+          chmod +x ./gradlew
+          ./gradlew bundleRelease --no-daemon
+    artifacts:
+      - FocusLock/app/build/outputs/bundle/release/*.aab
