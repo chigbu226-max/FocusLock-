@@ -9,12 +9,19 @@ workflows:
       - name: Unzip project
         script: |
           unzip -o FocusLock.zip
-          ls -la
+          ls -la FocusLock
       - name: Build AAB
         script: |
           cd FocusLock
+          echo "Fixing gradle wrapper..."
+          mkdir -p gradle/wrapper
+          echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
+          echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.5-bin.zip" >> gradle/wrapper/gradle-wrapper.properties
+          echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
+          echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+          # Download wrapper jar if missing
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
-            mkdir -p gradle/wrapper
             curl -L -o gradle/wrapper/gradle-wrapper.jar https://github.com/gradle/gradle/raw/v8.5.0/gradle/wrapper/gradle-wrapper.jar
           fi
           chmod +x ./gradlew
